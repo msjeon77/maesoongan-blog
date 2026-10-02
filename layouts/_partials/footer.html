@@ -1,0 +1,5 @@
+<footer class="site-foot">
+  <span>© {{ now.Year }} {{ site.Title }}</span>
+  {{- with site.Params.email }}<span>{{ . }}</span>{{ end }}
+  <a href="{{ "index.xml" | relURL }}">RSS</a>
+</footer>
