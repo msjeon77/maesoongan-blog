@@ -1,0 +1,11 @@
+<header class="site-head">
+  <a class="brand" href="{{ "/" | relURL }}"><b>{{ site.Title }}</b><span>maesoongan.com</span></a>
+  <nav aria-label="주 메뉴">
+    {{- $cur := . }}
+    {{- range site.Menus.main }}
+      {{- $active := or ($cur.IsMenuCurrent "main" .) ($cur.HasMenuCurrent "main" .) }}
+      {{- if and .Page (eq $cur.Section .Page.Section) (ne $cur.Section "") }}{{ $active = true }}{{ end }}
+      <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+    {{- end }}
+  </nav>
+</header>
