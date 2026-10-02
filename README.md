@@ -74,7 +74,7 @@ GitHub Desktop을 쓰면 "Clone a repository"로 가져오고, Commit과 Push �
    - Build command: `hugo --gc --minify`
    - Build output directory: `public`
    - Environment variables: `HUGO_VERSION` = `0.152.2`
-3. **Save and Deploy** → 1분쑤 뒤 `<프로젝트>.pages.dev` 주소로 열려요.
+3. **Save and Deploy** → 1분쯤 뒤 `<프로젝트>.pages.dev` 주소로 열려요.
 
 ## 6. maesoongan.com 연결
 
