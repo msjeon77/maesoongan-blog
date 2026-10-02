@@ -1,0 +1,53 @@
+{{ define "main" }}
+{{- $isPost := eq .Section "posts" }}
+<article class="post">
+  <header class="post-head">
+    {{- if $isPost }}
+    <p class="eyebrow">
+      {{- with .GetTerms "categories" }}{{ range . }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a> · {{ end }}{{ end -}}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
+      · {{ math.Max 1 (math.Ceil (div (float .FuzzyWordCount) 300)) }}분
+    </p>
+    {{- end }}
+    <h1>{{ .Title }}</h1>
+    {{- with .Description }}<p class="lede">{{ . }}</p>{{ end }}
+  </header>
+
+  {{- with .Params.cover }}
+    {{- with $.Resources.Get . }}
+      {{- $img := .Resize "1600x webp q82" }}
+      <figure class="cover"><img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $.Params.coverAlt }}"></figure>
+    {{- else }}
+      <figure class="cover"><img src="{{ . | relURL }}" alt="{{ $.Params.coverAlt }}"></figure>
+    {{- end }}
+  {{- end }}
+
+  {{- if and $isPost .Params.toc (gt (len .TableOfContents) 40) }}
+  <details class="toc" open><summary>목차</summary>{{ .TableOfContents }}</details>
+  {{- end }}
+
+  <div class="prose">{{ .Content }}</div>
+
+  {{- if $isPost }}
+  {{- with .GetTerms "tags" }}
+  <p class="tags">{{ range . }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a> {{ end }}</p>
+  {{- end }}
+
+  <nav class="pn" aria-label="이전 글, 다음 글">
+    {{- with .PrevInSection }}<a class="prev" href="{{ .RelPermalink }}"><span>이전 글</span>{{ .Title }}</a>{{ else }}<span></span>{{ end }}
+    {{- with .NextInSection }}<a class="next" href="{{ .RelPermalink }}"><span>다음 글</span>{{ .Title }}</a>{{ end }}
+  </nav>
+
+  {{- with site.Params.giscus }}{{ if .repo }}
+  <section class="comments" aria-label="댓글">
+    <script src="https://giscus.app/client.js"
+      data-repo="{{ .repo }}" data-repo-id="{{ .repoId }}"
+      data-category="{{ .category }}" data-category-id="{{ .categoryId }}"
+      data-mapping="pathname" data-strict="1" data-reactions-enabled="1"
+      data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme"
+      data-lang="ko" data-loading="lazy" crossorigin="anonymous" async></script>
+  </section>
+  {{- end }}{{ end }}
+  {{- end }}
+</article>
+{{ end }}
