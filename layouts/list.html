@@ -1,0 +1,18 @@
+{{ define "main" }}
+<header class="page-head">
+  <p class="eyebrow">{{ len .RegularPages }}편</p>
+  <h1>{{ .Title }}</h1>
+  {{- with .Description }}<p class="lede">{{ . }}</p>{{ end }}
+</header>
+{{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+{{- range .RegularPages.GroupByDate "2006" }}
+<section class="year">
+  <h2 class="year-label">{{ .Key }}</h2>
+  <ul class="rows">
+    {{- range .Pages }}{{ partial "post-row.html" . }}{{ end }}
+  </ul>
+</section>
+{{- else }}
+<p class="empty">아직 글이 없어요.</p>
+{{- end }}
+{{ end }}
