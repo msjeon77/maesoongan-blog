@@ -1,0 +1,19 @@
+{{- /* 일력처럼 큰 날짜 + 제목 + 요약 한 줄 */ -}}
+{{- $days := slice "일" "월" "화" "수" "목" "금" "토" }}
+{{- $dw := .Date.Weekday | int }}
+<li class="row">
+  <a href="{{ .RelPermalink }}">
+    <span class="row-date{{ if eq $dw 0 }} sun{{ else if eq $dw 6 }} sat{{ end }}" aria-hidden="true">
+      <span class="d">{{ .Date.Day }}</span>
+      <span class="m">{{ .Date.Format "2006.01" }} {{ index $days $dw }}</span>
+    </span>
+    <span class="row-body">
+      <span class="row-title">{{ .Title }}</span>
+      <span class="row-sum">{{ or .Description .Summary | plainify | htmlUnescape | truncate 90 }}</span>
+      <span class="row-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
+        {{- with .GetTerms "categories" }}{{ range first 1 . }} · {{ .LinkTitle }}{{ end }}{{ end }}
+      </span>
+    </span>
+  </a>
+</li>
