@@ -1,0 +1,34 @@
+{{ define "main" }}
+{{- $posts := where site.RegularPages "Section" "posts" }}
+<section class="hero">
+  <p class="eyebrow">{{ now.Format "2006.01.02" }}</p>
+  <h1>{{ site.Params.description }}</h1>
+  <p class="lede">{{ site.Params.intro }}</p>
+  {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+</section>
+
+<div class="home-grid">
+  <section aria-labelledby="h-latest">
+    <h2 class="label" id="h-latest">최근 글</h2>
+    {{- if $posts }}
+    <ul class="rows">
+      {{- range first 8 $posts.ByDate.Reverse }}{{ partial "post-row.html" . }}{{ end }}
+    </ul>
+    {{- if gt (len $posts) 8 }}<p><a class="more" href="{{ "posts/" | relURL }}">글 전체 보기 →</a></p>{{ end }}
+    {{- else }}
+    <p class="empty">아직 글이 없어요. <code>content/posts/</code>에 첫 글을 넣어 보세요.</p>
+    {{- end }}
+  </section>
+
+  <aside aria-labelledby="h-cats">
+    <h2 class="label" id="h-cats">카테고리</h2>
+    <ul class="cats">
+      {{- range site.Taxonomies.categories.ByCount }}
+      <li><a href="{{ .Page.RelPermalink }}"><span>{{ .Page.LinkTitle }}</span><span class="n">{{ .Count }}</span></a></li>
+      {{- end }}
+    </ul>
+    <h2 class="label">기록 중</h2>
+    <p class="side-stat"><span class="big">{{ len $posts }}</span> 편의 글</p>
+  </aside>
+</div>
+{{ end }}
