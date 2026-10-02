@@ -1,0 +1,65 @@
+baseURL = "https://maesoongan.com/"
+languageCode = "ko-KR"
+defaultContentLanguage = "ko"
+title = "매순간"
+hasCJKLanguage = true
+enableRobotsTXT = true
+summaryLength = 60
+
+[pagination]
+  pagerSize = 20
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[permalinks]
+  [permalinks.page]
+    posts = "/posts/:slug/"
+
+[params]
+  description = "만들고, 찍고, 기록하는 매 순간"
+  author = "매순간"
+  # 메인 페이지 맨 위 소개 문장
+  intro = "3D 프리비즈, 서버와 로컬 LLM, 그리고 하루 한 장의 기록. 만들면서 배운 것들을 남겨 둡니다."
+  email = "me@maesoongan.com"
+
+  # Cloudflare Web Analytics 토큰 (대시보드 > Web Analytics에서 발급). 비워 두면 꺼짐
+  cfAnalyticsToken = ""
+
+  # giscus 댓글 (https://giscus.app 에서 값 복사). repo를 비워 두면 댓글 꺼짐
+  [params.giscus]
+    repo = ""
+    repoId = ""
+    category = "Announcements"
+    categoryId = ""
+
+[menus]
+  [[menus.main]]
+    name = "글"
+    pageRef = "/posts"
+    weight = 10
+  [[menus.main]]
+    name = "카테고리"
+    pageRef = "/categories"
+    weight = 20
+  [[menus.main]]
+    name = "소개"
+    pageRef = "/about"
+    weight = 30
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true   # 글 안에 <video>, <iframe> 같은 HTML 허용
+  [markup.highlight]
+    style = "nord"
+    lineNos = false
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+
+[outputs]
+  home = ["html", "rss"]
+  section = ["html", "rss"]
+  taxonomy = ["html"]
+  term = ["html", "rss"]
