@@ -1,0 +1,17 @@
+{{ define "main" }}
+<header class="page-head">
+  <p class="eyebrow">{{ len .RegularPages }}개의 순간</p>
+  <h1>{{ .Title }}</h1>
+  {{- with .Description }}<p class="lede">{{ . }}</p>{{ end }}
+</header>
+{{- range .RegularPages.ByDate.Reverse.GroupByDate "2006.01" }}
+<section class="year">
+  <h2 class="year-label">{{ .Key }}</h2>
+  <div class="moments">
+    {{- range .Pages }}{{ partial "moment.html" (dict "p" .) }}{{ end }}
+  </div>
+</section>
+{{- else }}
+<p class="empty">아직 기록이 없어요.</p>
+{{- end }}
+{{ end }}

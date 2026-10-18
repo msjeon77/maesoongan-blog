@@ -48,6 +48,16 @@ hugo new content posts/corridor-previz/index.md
 - 날짜(`date`)가 미래인 글은 그 시각이 지나고 다음 배포 때 올라가요.
 - 예시 글 `content/posts/how-to-write`는 읽고 나서 지워도 돼요.
 
+## 3-1. 한순간 (오늘의 한줄) 쓰기
+
+하루 기록 하나 = `content/moments/<날짜>/` 폴더 하나예요.
+
+```powershell
+hugo new content moments/2026-10-19/index.md
+```
+
+`index.md` 본문에 한 줄을 쓰고, 사진이 있으면 같은 폴더에 넣은 뒤 머리말의 `photo:`에 파일 이름을 적어요. 메인 화면 맨 위 "오늘의 한줄"에는 가장 최근 기록이 자동으로 떠요.
+
 ## 4. 내 컴퓨터로 가져오기와 올리기
 
 저장소는 https://github.com/msjeon77/maesoongan-blog 에 있어요. 처음 한 번 내 컴퓨터로 가져와요.

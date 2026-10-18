@@ -40,6 +40,10 @@ summaryLength = 60
     pageRef = "/posts"
     weight = 10
   [[menus.main]]
+    name = "한순간"
+    pageRef = "/moments"
+    weight = 15
+  [[menus.main]]
     name = "카테고리"
     pageRef = "/categories"
     weight = 20

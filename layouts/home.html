@@ -1,11 +1,20 @@
 {{ define "main" }}
 {{- $posts := where site.RegularPages "Section" "posts" }}
+{{- $moments := (where site.RegularPages "Section" "moments").ByDate.Reverse }}
 <section class="hero">
   <p class="eyebrow">{{ now.Format "2006.01.02" }}</p>
   <h1>{{ site.Params.description }}</h1>
   <p class="lede">{{ site.Params.intro }}</p>
   {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
 </section>
+
+{{- with index $moments 0 }}
+<section class="today" aria-labelledby="h-today">
+  <h2 class="label" id="h-today">{{ if eq (.Date.Format "2006-01-02") (now.Format "2006-01-02") }}오늘의 한줄{{ else }}가장 최근의 한줄{{ end }}</h2>
+  {{ partial "moment.html" (dict "p" . "big" true) }}
+  <p><a class="more" href="{{ "moments/" | relURL }}">한순간 전체 보기 →</a></p>
+</section>
+{{- end }}
 
 <div class="home-grid">
   <section aria-labelledby="h-latest">
@@ -29,6 +38,7 @@
     </ul>
     <h2 class="label">기록 중</h2>
     <p class="side-stat"><span class="big">{{ len $posts }}</span> 편의 글</p>
+    <p class="side-stat"><span class="big">{{ len $moments }}</span> 개의 순간</p>
   </aside>
 </div>
 {{ end }}

@@ -114,6 +114,24 @@ h1,h2,h3{text-wrap:balance}
 .pn .next{text-align:right;grid-column:2}
 .comments{margin-top:56px}
 
+/* 한순간: 사진 한 장 + 한 줄 */
+.today{margin-bottom:48px}
+.moments{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:12px}
+.moment{margin:0;background:var(--sheet);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.moment img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.moment figcaption{display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;align-items:start;padding:18px}
+.moment-date{display:grid}
+.moment-date .d{font-family:var(--display);font-weight:800;font-size:48px;line-height:.85;font-variant-numeric:tabular-nums}
+.moment-date .m{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;white-space:nowrap}
+.moment-date.sun .d{color:var(--sun)} .moment-date.sat .d{color:var(--sat)}
+.moment-line{font-family:var(--serif);font-size:18px;line-height:1.6}
+.moment-big{border-left:3px solid var(--accent)}
+.moment-big figcaption{grid-template-columns:84px minmax(0,1fr);padding:24px}
+.moment-big .moment-date .d{font-size:64px}
+.moment-big .moment-line{font-size:clamp(20px,2.6vw,26px);line-height:1.5}
+.moment-big img{aspect-ratio:16/9}
+.today .more{display:inline-block;margin-top:10px}
+
 @media (max-width:760px){
   body{font-size:16px;padding-inline:16px}
   .home-grid{grid-template-columns:minmax(0,1fr);gap:40px}
