@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>팜팩토리 · 매순간</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Gowun+Batang:wght@700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#F2F3EF; --sheet:#FBFBF8; --ink:#1B201E; --muted:#69716D; --line:#D9DCD5;
+  --accent:#2747C9; --sun:#C8372A; --grow:#3F8A4A; --soil:#E6DCCB; --soil-dk:#CDBFA6; --gold:#B7860B;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --serif:"Gowun Batang","Nanum Myeongjo",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#111413; --sheet:#1A1E1C; --ink:#ECEEE9; --muted:#9AA29E; --line:#2E3431;
+  --accent:#8EA4FF; --sun:#FF7A6B; --grow:#7BC987; --soil:#2A2620; --soil-dk:#3A342B; --gold:#E8B84A; color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding:0 16px 48px;word-break:keep-all}
+.wrap{max-width:1000px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;padding:20px 0 16px;border-bottom:1px solid var(--line)}
+header h1{font-family:var(--serif);font-size:24px;margin:0;margin-right:auto}
+header a{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none}
+.stats{display:flex;flex-wrap:wrap;gap:24px;padding:18px 0}
+.stat .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.stat .v{font-family:var(--display);font-weight:800;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.stat.coins .v{color:var(--gold)}
+.goal{flex:1;min-width:200px;align-self:end}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin:0 0 8px}
+.grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+section{margin-bottom:28px}
+.seeds{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+button{font:inherit;color:inherit;cursor:pointer}
+.chip{border:1px solid var(--line);background:var(--sheet);border-radius:999px;padding:6px 12px;font-size:14px}
+.chip[aria-pressed=true]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);color:var(--accent)}
+.chip:disabled{opacity:.4;cursor:not-allowed}
+.plots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.plot{position:relative;aspect-ratio:1;border:1px solid var(--soil-dk);background:var(--soil);border-radius:6px;display:grid;place-items:center;font-size:32px;overflow:hidden;padding:0}
+.plot .p,.bar i.run{animation:fill linear forwards}
+.plot .p{position:absolute;left:0;bottom:0;height:4px;background:var(--grow);width:0}
+@keyframes fill{from{width:0}to{width:100%}}
+.plot .sprout{opacity:.6;transform:scale(.7)}
+.plot.ready{box-shadow:inset 0 0 0 2px var(--grow)}
+.plot.ready::after{content:"수확";position:absolute;top:4px;right:6px;font-family:var(--mono);font-size:10px;color:var(--grow)}
+.plot.locked{background:transparent;border-style:dashed;border-color:var(--line);font-size:12px;font-family:var(--mono);color:var(--muted)}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:6px}
+.inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.item{padding:10px 12px;display:grid;gap:6px}
+.item .top{display:flex;justify-content:space-between;align-items:baseline}
+.item .n{font-family:var(--display);font-weight:800;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.item .pr{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.sell{border:1px solid var(--line);background:transparent;border-radius:4px;padding:3px 8px;font-size:12px}
+.sell:disabled{opacity:.4;cursor:not-allowed}
+.fac{padding:12px 14px;display:grid;gap:8px;margin-bottom:8px}
+.fac .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fac b{font-family:var(--serif);font-size:17px}
+.fac .rec{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.fac .bar i{background:var(--grow)}
+.btn{border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:4px;padding:5px 10px;font-size:13px;white-space:nowrap}
+.btn:disabled{border-color:var(--line);color:var(--muted);cursor:not-allowed}
+.ups .fac{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.ups .d{font-size:13px;color:var(--muted)}
+.log{font-family:var(--mono);font-size:12px;color:var(--muted);min-height:18px;margin-top:8px}
+.foot{display:flex;gap:16px;margin-top:20px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.foot button{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.win{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;place-items:center;padding:16px}
+.win.on{display:grid}
+.win .card{max-width:360px;padding:28px;text-align:center}
+.win h2{font-family:var(--serif);margin:0 0 8px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:760px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .stat .v{font-size:32px}
+  .plot{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>팜팩토리</h1>
+    <a href="/">← 매순간</a>
+  </header>
+
+  <div class="stats">
+    <div class="stat coins"><div class="k">코인</div><div class="v" id="coins">0</div></div>
+    <div class="stat"><div class="k">초당 수익</div><div class="v" id="rate">0</div></div>
+    <div class="goal">
+      <div class="k label" style="margin:0">목표 · 코인 10,000 모으기</div>
+      <div class="bar"><i id="goalbar"></i></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <section>
+        <h2 class="label">밭 · 씨앗을 고르고 빈 땅을 눌러 심기</h2>
+        <div class="seeds" id="seeds"></div>
+        <div class="plots" id="plots"></div>
+        <div class="log" id="log" aria-live="polite"></div>
+      </section>
+      <section>
+        <h2 class="label">창고</h2>
+        <div class="inv" id="inv"></div>
+      </section>
+    </div>
+    <div>
+      <section>
+        <h2 class="label">공장 · 작물을 자동으로 가공</h2>
+        <div id="facs"></div>
+      </section>
+      <section class="ups">
+        <h2 class="label">업그레이드</h2>
+        <div id="ups"></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>진행 상황은 이 브라우저에 자동 저장돼요.</span>
+    <button id="reset" type="button">처음부터</button>
+  </div>
+</div>
+
+<div class="win" id="win" role="dialog" aria-modal="true" aria-labelledby="win-t">
+  <div class="card">
+    <h2 id="win-t">팜팩토리 완성!</h2>
+    <p>코인 10,000을 모았어요. 걸린 시간 <b id="win-time"></b>.</p>
+    <button class="btn" id="win-close" type="button">계속하기</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const CROPS = {
+    wheat:{name:"밀", icon:"🌾", seed:2, grow:5, price:4},
+    corn:{name:"옥수수", icon:"🌽", seed:8, grow:12, price:14, unlock:150},
+    berry:{name:"딸기", icon:"🍓", seed:25, grow:25, price:40, unlock:900},
+  };
+  const GOODS = {
+    flour:{name:"밀가루", icon:"🥡", price:14},
+    popcorn:{name:"팝콘", icon:"🍿", price:45},
+    jam:{name:"잼", icon:"🫙", price:130},
+  };
+  const FACTORIES = {
+    mill:{name:"제분소", from:"wheat", need:2, to:"flour", time:4, cost:60},
+    popper:{name:"팝콘 공장", from:"corn", need:2, to:"popcorn", time:6, cost:400},
+    jammer:{name:"잼 공장", from:"berry", need:2, to:"jam", time:8, cost:2000},
+  };
+  const GOAL = 10000, MAX_PLOTS = 16, START_PLOTS = 4;
+
+  const fresh = () => ({
+    coins: 20, plots: Array.from({length:START_PLOTS}, () => null),
+    inv: {}, facs: {}, seed: "wheat",
+    lv: {speed:0, fac:0, farmer:0, seller:0}, started: Date.now(), won: false, earned: [],
+  });
+  let S;
+  try { S = JSON.parse(localStorage.getItem("farmfactory-kx7")) || fresh(); } catch { S = fresh(); }
+  const save = () => { try { localStorage.setItem("farmfactory-kx7", JSON.stringify(S)); } catch {} };
+
+  const $ = id => document.getElementById(id);
+  const fmt = n => Math.floor(n).toLocaleString("ko-KR");
+  const all = {...CROPS, ...GOODS};
+  const count = k => S.inv[k] || 0;
+  const growTime = k => CROPS[k].grow * Math.pow(0.85, S.lv.speed);
+  const facTime = k => FACTORIES[k].time * Math.pow(0.8, S.lv.fac);
+  const plotCost = () => Math.round(40 * Math.pow(1.6, S.plots.length - START_PLOTS));
+  let msgT;
+  const log = m => { $("log").textContent = m; clearTimeout(msgT); msgT = setTimeout(() => $("log").textContent = "", 2500); };
+  const earn = n => { S.coins += n; S.earned.push([Date.now(), n]); };
+
+  const UPS = {
+    plot:{name:"땅 넓히기", desc:() => `밭 한 칸 추가 (${S.plots.length}/${MAX_PLOTS})`, cost:plotCost, max:() => S.plots.length >= MAX_PLOTS,
+      buy:() => S.plots.push(null)},
+    speed:{name:"비료", desc:() => "작물이 15% 빨리 자라요", cost:() => Math.round(80 * Math.pow(2.2, S.lv.speed)), max:() => S.lv.speed >= 6,
+      buy:() => S.lv.speed++},
+    fac:{name:"컨베이어 벨트", desc:() => "공장이 20% 빨리 돌아가요", cost:() => Math.round(250 * Math.pow(2.4, S.lv.fac)), max:() => S.lv.fac >= 5,
+      buy:() => S.lv.fac++},
+    farmer:{name:"일꾼 고용", desc:() => S.lv.farmer ? "일꾼이 다 자란 작물을 수확하고 같은 씨앗을 다시 심어요 (고용 완료)" : "다 자란 작물을 자동으로 수확하고 다시 심어요", cost:() => 500, max:() => S.lv.farmer >= 1,
+      buy:() => S.lv.farmer = 1},
+    seller:{name:"상인 계약", desc:() => S.lv.seller ? "가공품이 쌓이면 상인이 자동으로 팔아요 (계약 완료)" : "가공품을 자동으로 팔아요", cost:() => 1500, max:() => S.lv.seller >= 1,
+      buy:() => S.lv.seller = 1},
+  };
+
+  function plant(i){
+    const p = S.plots[i], now = Date.now();
+    if (p && now >= p.t + growTime(p.k) * 1000) {
+      S.inv[p.k] = count(p.k) + 1; S.plots[i] = null; log(`${CROPS[p.k].icon} ${CROPS[p.k].name} 수확`);
+      return;
+    }
+    if (p) return;
+    const c = CROPS[S.seed];
+    if (S.coins < c.seed) { log("코인이 부족해요"); return; }
+    S.coins -= c.seed; S.plots[i] = {k:S.seed, t:now};
+  }
+  function sell(k, n){
+    n = Math.min(n, count(k)); if (!n) return;
+    S.inv[k] -= n; earn(n * all[k].price);
+  }
+
+  function tick(){
+    const now = Date.now();
+    // 일꾼
+    if (S.lv.farmer) S.plots.forEach((p, i) => {
+      if (p && now >= p.t + growTime(p.k) * 1000) {
+        S.inv[p.k] = count(p.k) + 1;
+        S.plots[i] = S.coins >= CROPS[p.k].seed ? (S.coins -= CROPS[p.k].seed, {k:p.k, t:now}) : null;
+      }
+    });
+    // 공장
+    for (const [k, f] of Object.entries(FACTORIES)) {
+      const st = S.facs[k]; if (!st) continue;
+      if (st.t && now >= st.t + facTime(k) * 1000) { S.inv[f.to] = count(f.to) + 1; st.t = 0; }
+      if (!st.t && count(f.from) >= f.need) { S.inv[f.from] -= f.need; st.t = now; }
+    }
+    // 상인
+    if (S.lv.seller) for (const k of Object.keys(GOODS)) sell(k, count(k));
+    // 목표
+    if (!S.won && S.coins >= GOAL) {
+      S.won = true;
+      const s = Math.round((now - S.started) / 1000);
+      $("win-time").textContent = `${Math.floor(s / 60)}분 ${s % 60}초`;
+      $("win").classList.add("on"); $("win-close").focus();
+    }
+    S.earned = S.earned.filter(e => now - e[0] < 10000);
+  }
+
+  const last = {};
+  // 진행 막대의 시간 값은 비교에서 빼고, 구조가 바뀔 때만 다시 그려요 (클릭이 끊기지 않게)
+  const put = (id, html) => { const sig = html.replace(/animation-delay:-[\d.]+s/g, ""); if (last[id] !== sig) { last[id] = sig; $(id).innerHTML = html; } };
+  function render(){
+    const now = Date.now();
+    $("coins").textContent = fmt(S.coins);
+    $("rate").textContent = fmt(S.earned.reduce((a, e) => a + e[1], 0) / 10);
+    $("goalbar").style.width = Math.min(100, S.coins / GOAL * 100) + "%";
+
+    put("seeds", Object.entries(CROPS).map(([k, c]) => {
+      const locked = c.unlock && !(S.unlocked || []).includes(k);
+      return locked
+        ? `<button class="chip" data-unlock="${k}" ${S.coins < c.unlock ? "disabled" : ""}>🔒 ${c.name} 열기 · ${fmt(c.unlock)}</button>`
+        : `<button class="chip" data-seed="${k}" aria-pressed="${S.seed === k}">${c.icon} ${c.name} · 씨앗 ${c.seed}</button>`;
+    }).join(""));
+
+    let html = S.plots.map((p, i) => {
+      if (!p) return `<button class="plot" data-plot="${i}" aria-label="빈 땅, 심기"></button>`;
+      const dur = growTime(p.k), el = (now - p.t) / 1000, ready = el >= dur, c = CROPS[p.k];
+      return ready
+        ? `<button class="plot ready" data-plot="${i}" aria-label="${c.name} 수확 가능"><span>${c.icon}</span></button>`
+        : `<button class="plot" data-plot="${i}" aria-label="${c.name} 자라는 중"><span class="sprout">🌱</span><i class="p" style="animation-duration:${dur}s;animation-delay:-${el}s"></i></button>`;
+    }).join("");
+    for (let i = S.plots.length; i < MAX_PLOTS; i++) html += `<div class="plot locked">${i === S.plots.length ? "업그레이드로 확장" : ""}</div>`;
+    put("plots", html);
+
+    put("inv", Object.entries(all).filter(([k]) => count(k) > 0 || k in CROPS && (!CROPS[k].unlock || (S.unlocked || []).includes(k))).map(([k, it]) =>
+      `<div class="card item"><div class="top"><span>${it.icon} ${it.name}</span><span class="pr">개당 ${it.price}</span></div>
+       <div class="top"><span class="n">${fmt(count(k))}</span><span>
+       <button class="sell" data-sell="${k}" data-n="1" ${count(k) ? "" : "disabled"}>1개</button>
+       <button class="sell" data-sell="${k}" data-n="9999" ${count(k) ? "" : "disabled"}>전부</button></span></div></div>`).join(""));
+
+    put("facs", Object.entries(FACTORIES).map(([k, f]) => {
+      const st = S.facs[k], from = CROPS[f.from], to = GOODS[f.to];
+      if (!st) return `<div class="card fac"><div class="row"><b>${f.name}</b><button class="btn" data-build="${k}" ${S.coins < f.cost ? "disabled" : ""}>짓기 · ${fmt(f.cost)}</button></div>
+        <div class="rec">${from.icon} ${from.name} ${f.need}개 → ${to.icon} ${to.name} 1개</div></div>`;
+      const bar = st.t ? `<i class="run" style="animation-duration:${facTime(k)}s;animation-delay:-${(now - st.t) / 1000}s"></i>` : `<i></i>`;
+      return `<div class="card fac"><div class="row"><b>${f.name}</b><span class="rec">${st.t ? "가공 중" : `${from.name} 기다리는 중`}</span></div>
+        <div class="rec">${from.icon} ${from.name} ${f.need}개 → ${to.icon} ${to.name} 1개 · ${facTime(k).toFixed(1)}초</div>
+        <div class="bar">${bar}</div></div>`;
+    }).join(""));
+
+    put("ups", Object.entries(UPS).map(([k, u]) => {
+      const done = u.max(), c = u.cost();
+      return `<div class="card fac"><div><b>${u.name}</b><div class="d">${u.desc()}</div></div>
+        ${done ? `<span class="rec">완료</span>` : `<button class="btn" data-up="${k}" ${S.coins < c ? "disabled" : ""}>${fmt(c)}</button>`}</div>`;
+    }).join(""));
+  }
+
+  document.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    const d = b.dataset;
+    if (d.plot) plant(+d.plot);
+    else if (d.seed) S.seed = d.seed;
+    else if (d.unlock) { const c = CROPS[d.unlock]; if (S.coins >= c.unlock) { S.coins -= c.unlock; (S.unlocked = S.unlocked || []).push(d.unlock); S.seed = d.unlock; log(`${c.icon} ${c.name} 씨앗을 열었어요`); } }
+    else if (d.sell) sell(d.sell, +d.n);
+    else if (d.build) { const f = FACTORIES[d.build]; if (S.coins >= f.cost) { S.coins -= f.cost; S.facs[d.build] = {t:0}; log(`${f.name}을 지었어요`); } }
+    else if (d.up) { const u = UPS[d.up], c = u.cost(); if (!u.max() && S.coins >= c) { S.coins -= c; u.buy(); log(`${u.name} 완료`); } }
+    else if (b.id === "win-close") $("win").classList.remove("on");
+    else if (b.id === "reset") { if (confirm("처음부터 다시 시작할까요? 진행 상황이 지워져요.")) { S = fresh(); } }
+    else return;
+    save(); render();
+  });
+
+  setInterval(() => { tick(); render(); }, 250);
+  setInterval(save, 3000);
+  addEventListener("pagehide", save);
+  render();
+})();
+</script>
+</body>
+</html>
