@@ -10,8 +10,11 @@
 
 {{- with index $moments 0 }}
 <section class="today" aria-labelledby="h-today">
-  <h2 class="label" id="h-today">{{ if eq (.Date.Format "2006-01-02") (now.Format "2006-01-02") }}오늘의 한줄{{ else }}가장 최근의 한줄{{ end }}</h2>
-  {{ partial "moment.html" (dict "p" . "big" true) }}
+  {{- /* 배포 서버는 UTC라서 한국 시간으로 맞춰 비교 */}}
+  {{- $kstNow := now.UTC.Add (time.ParseDuration "9h") }}
+  {{- $isToday := eq (.Date.Format "2006-01-02") ($kstNow.Format "2006-01-02") }}
+  <h2 class="skip" id="h-today">{{ if $isToday }}오늘의 한줄{{ else }}가장 최근의 한줄{{ end }}</h2>
+  {{ partial "today.html" (dict "p" . "today" $isToday) }}
   <p><a class="more" href="{{ "moments/" | relURL }}">한순간 전체 보기 →</a></p>
 </section>
 {{- end }}

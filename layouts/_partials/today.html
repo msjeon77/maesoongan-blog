@@ -1,0 +1,30 @@
+{{- /* 메인 "오늘의 한줄" 카드: 요일마다 색이 바뀌는 일력 한 장. 받는 값: dict "p" 페이지 "today" 오늘 여부 */ -}}
+{{- $p := .p }}
+{{- $days := slice "일요일" "월요일" "화요일" "수요일" "목요일" "금요일" "토요일" }}
+{{- $dw := $p.Date.Weekday | int }}
+{{- $line := $p.Content | plainify | htmlUnescape | strings.TrimSpace }}
+{{- $words := split (replaceRE `\s+` " " $line) " " }}
+<article class="tc tc-{{ $dw }}{{ with $p.Params.photo }}{{ with $p.Resources.Get . }} tc-has-photo{{ end }}{{ end }}">
+  <span class="tc-num" aria-hidden="true">{{ $p.Date.Day }}</span>
+
+  <header class="tc-top">
+    <span class="tc-badge">{{ if .today }}오늘의 한줄{{ else }}가장 최근의 한줄{{ end }}</span>
+    <time class="tc-date" datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006.01.02" }} · {{ index $days $dw }}</time>
+  </header>
+
+  <p class="tc-line"><span class="tc-hl" style="--n:{{ len $words }}">
+    {{- range $i, $w := $words }}<span class="tc-w" style="--i:{{ $i }}">{{ $w }}</span>{{ if lt $i (sub (len $words) 1) }} {{ end }}{{ end -}}
+  </span></p>
+
+  {{- with $p.Params.photo }}{{ with $p.Resources.Get . }}
+    {{- $img := .Fill "900x900 webp q80 Smart" }}
+  <img class="tc-photo" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="">
+  {{- end }}{{ end }}
+
+  <svg class="tc-stamp" viewBox="0 0 120 120" aria-hidden="true">
+    <defs><path id="tc-circle" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+    <circle cx="60" cy="60" r="57" class="tc-stamp-bg"/>
+    <text><textPath href="#tc-circle" textLength="272">MAESOONGAN · 매순간 · ONE LINE A DAY ·</textPath></text>
+    <text x="60" y="68" text-anchor="middle" class="tc-stamp-mid">{{ $p.Date.Format "01.02" }}</text>
+  </svg>
+</article>
