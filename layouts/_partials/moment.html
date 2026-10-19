@@ -1,17 +1,15 @@
-{{- /* 한순간 카드: 큰 날짜 + (사진) + 한 줄. 받는 값: dict "p" 페이지 "big" 메인용 여부 */ -}}
+{{- /* 한순간 카드: 요일 색 일력 한 장. 받는 값: dict "p" 페이지 */ -}}
 {{- $p := .p }}
 {{- $days := slice "일" "월" "화" "수" "목" "금" "토" }}
 {{- $dw := $p.Date.Weekday | int }}
-<figure class="moment{{ if .big }} moment-big{{ end }}">
+<figure class="mc wd-{{ $dw }}">
   {{- with $p.Params.photo }}{{ with $p.Resources.Get . }}
-    {{- $img := .Resize "1200x webp q80" }}
-    <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="" loading="lazy">
+    {{- $img := .Fill "800x600 webp q80 Smart" }}
+  <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="" loading="lazy">
   {{- end }}{{ end }}
+  <span class="mc-num" aria-hidden="true">{{ $p.Date.Day }}</span>
   <figcaption>
-    <span class="moment-date{{ if eq $dw 0 }} sun{{ else if eq $dw 6 }} sat{{ end }}">
-      <span class="d">{{ $p.Date.Day }}</span>
-      <span class="m">{{ $p.Date.Format "2006.01" }} {{ index $days $dw }}</span>
-    </span>
-    <span class="moment-line">{{ $p.Content | plainify | htmlUnescape | strings.TrimSpace }}</span>
+    <time class="mc-date" datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006.01.02" }} · {{ index $days $dw }}</time>
+    <span class="mc-line">{{ $p.Content | plainify | htmlUnescape | strings.TrimSpace }}</span>
   </figcaption>
 </figure>

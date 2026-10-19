@@ -3,7 +3,8 @@
 <head>
   {{ partial "head.html" . }}
 </head>
-<body>
+{{- $kst := now.UTC.Add (time.ParseDuration "9h") }}
+<body class="wd-{{ $kst.Weekday | int }}">
   <a class="skip" href="#main">본문으로 건너뛰기</a>
   <div class="wrap">
     {{ partial "header.html" . }}

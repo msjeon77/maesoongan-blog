@@ -1,5 +1,9 @@
 <header class="site-head">
-  <a class="brand" href="{{ "/" | relURL }}"><b>{{ site.Title }}</b><span>maesoongan.com</span></a>
+  {{- $kst := now.UTC.Add (time.ParseDuration "9h") }}
+  <a class="brand" href="{{ "/" | relURL }}">
+    <span class="brand-cal" aria-hidden="true"><span class="brand-cal-d">{{ $kst.Day }}</span></span>
+    <b>{{ site.Title }}</b><span>maesoongan.com</span>
+  </a>
   <nav aria-label="주 메뉴">
     {{- $cur := . }}
     {{- range site.Menus.main }}

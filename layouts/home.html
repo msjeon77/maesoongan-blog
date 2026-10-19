@@ -2,11 +2,18 @@
 {{- $posts := where site.RegularPages "Section" "posts" }}
 {{- $moments := (where site.RegularPages "Section" "moments").ByDate.Reverse }}
 <section class="hero">
-  <p class="eyebrow">{{ now.Format "2006.01.02" }}</p>
-  <h1>{{ site.Params.description }}</h1>
+  <p class="eyebrow">{{ (now.UTC.Add (time.ParseDuration "9h")).Format "2006.01.02" }}</p>
+  <h1>{{ replace (site.Params.description | htmlEscape) "매 순간" `<em class="hero-em">매 순간</em>` | safeHTML }}</h1>
   <p class="lede">{{ site.Params.intro }}</p>
   {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
 </section>
+
+{{- $words := slice "만들고" "찍고" "기록하고" }}
+{{- range site.Taxonomies.categories.ByCount }}{{ $words = $words | append .Page.LinkTitle }}{{ end }}
+{{- $words = $words | append "ONE LINE A DAY" }}
+<div class="ticker" aria-hidden="true"><div class="ticker-track">
+  {{- range seq 2 }}<span class="ticker-set">{{ range $words }}<span>{{ . }}</span><i>✺</i>{{ end }}</span>{{ end -}}
+</div></div>
 
 {{- with index $moments 0 }}
 <section class="today" aria-labelledby="h-today">

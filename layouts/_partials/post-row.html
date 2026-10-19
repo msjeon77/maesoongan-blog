@@ -1,7 +1,7 @@
 {{- /* 일력처럼 큰 날짜 + 제목 + 요약 한 줄 */ -}}
 {{- $days := slice "일" "월" "화" "수" "목" "금" "토" }}
 {{- $dw := .Date.Weekday | int }}
-<li class="row">
+<li class="row wd-{{ $dw }}">
   <a href="{{ .RelPermalink }}">
     <span class="row-date{{ if eq $dw 0 }} sun{{ else if eq $dw 6 }} sat{{ end }}" aria-hidden="true">
       <span class="d">{{ .Date.Day }}</span>
