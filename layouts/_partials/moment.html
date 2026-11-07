@@ -10,6 +10,6 @@
   <span class="mc-num" aria-hidden="true">{{ $p.Date.Day }}</span>
   <figcaption>
     <time class="mc-date" datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006.01.02" }} · {{ index $days $dw }}</time>
-    <span class="mc-line">{{ $p.Content | plainify | htmlUnescape | strings.TrimSpace }}</span>
+    <span class="mc-line">{{ $p.RawContent | strings.TrimSpace | htmlEscape | replaceRE `\s*\n\s*` "<br>" | safeHTML }}</span>
   </figcaption>
 </figure>

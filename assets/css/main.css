@@ -203,6 +203,7 @@ h1,h2,h3{text-wrap:balance}
 
 .tc-line{position:relative;z-index:1;margin:0;max-width:20ch;font-family:var(--serif);font-weight:700;font-size:clamp(28px,4.6vw,50px);line-height:1.38;letter-spacing:-.015em;text-wrap:balance}
 .tc-hl{background:linear-gradient(var(--tc-pop),var(--tc-pop)) 0 100%/0% .2em no-repeat;-webkit-box-decoration-break:clone;box-decoration-break:clone;animation:tc-hl 1.1s cubic-bezier(.6,0,.2,1) both;animation-delay:calc(.35s + var(--n,8) * 70ms)}
+.tc-poem .tc-line{max-width:none;font-size:clamp(24px,3.4vw,38px);line-height:1.6}
 .tc-w{display:inline-block;animation:tc-word .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.3s + var(--i) * 70ms)}
 
 .tc-photo{position:relative;z-index:1;width:100%;max-width:280px;aspect-ratio:1;object-fit:cover;border-radius:8px;border:6px solid var(--tc-ink);rotate:3deg;box-shadow:0 14px 28px -12px rgba(0,0,0,.45)}

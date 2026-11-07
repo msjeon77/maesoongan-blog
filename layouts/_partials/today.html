@@ -2,9 +2,14 @@
 {{- $p := .p }}
 {{- $days := slice "일요일" "월요일" "화요일" "수요일" "목요일" "금요일" "토요일" }}
 {{- $dw := $p.Date.Weekday | int }}
-{{- $line := $p.Content | plainify | htmlUnescape | strings.TrimSpace }}
-{{- $words := split (replaceRE `\s+` " " $line) " " }}
-<article class="tc tc-{{ $dw }}{{ with $p.Params.photo }}{{ with $p.Resources.Get . }} tc-has-photo{{ end }}{{ end }}">
+{{- /* plainify는 줄바꿈을 없애므로 원문(마크다운)에서 줄을 나눔 */}}
+{{- $text := $p.RawContent | strings.TrimSpace }}
+{{- /* 줄바꿈을 살려서 시도 행 그대로 보이게 */}}
+{{- $lines := slice }}
+{{- range split $text "\n" }}{{ with strings.TrimSpace . }}{{ $lines = $lines | append (replaceRE `\s+` " " .) }}{{ end }}{{ end }}
+{{- $total := 0 }}{{ range $lines }}{{ $total = add $total (len (split . " ")) }}{{ end }}
+{{- $poem := gt (len $lines) 1 }}
+<article class="tc tc-{{ $dw }}{{ if $poem }} tc-poem{{ end }}{{ with $p.Params.photo }}{{ with $p.Resources.Get . }} tc-has-photo{{ end }}{{ end }}">
   <span class="tc-num" aria-hidden="true">{{ $p.Date.Day }}</span>
 
   <header class="tc-top">
@@ -12,8 +17,13 @@
     <time class="tc-date" datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006.01.02" }} · {{ index $days $dw }}</time>
   </header>
 
-  <p class="tc-line"><span class="tc-hl" style="--n:{{ len $words }}">
-    {{- range $i, $w := $words }}<span class="tc-w" style="--i:{{ $i }}">{{ $w }}</span>{{ if lt $i (sub (len $words) 1) }} {{ end }}{{ end -}}
+  <p class="tc-line"><span class="tc-hl" style="--n:{{ $total }}">
+    {{- $k := 0 }}
+    {{- range $li, $l := $lines }}
+      {{- if gt $li 0 }}<br>{{ end }}
+      {{- $ws := split $l " " }}
+      {{- range $i, $w := $ws }}<span class="tc-w" style="--i:{{ $k }}">{{ $w }}</span>{{ if lt $i (sub (len $ws) 1) }} {{ end }}{{ $k = add $k 1 }}{{ end }}
+    {{- end -}}
   </span></p>
 
   {{- with $p.Params.photo }}{{ with $p.Resources.Get . }}
